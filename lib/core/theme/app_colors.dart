@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static const Color surface = Color(0xFFFFF8F3);
-  static const Color surfaceDim = Color(0xFFE0D9D3);
-  static const Color surfaceBright = Color(0xFFFFF8F3);
+  static const Color surface = Color(0xFFF7F9F6);
+  static const Color surfaceDim = Color(0xFFD9E1D9);
+  static const Color surfaceBright = Color(0xFFF7F9F6);
   static const Color surfaceContainerLowest = Color(0xFFFFFFFF);
-  static const Color surfaceContainerLow = Color(0xFFFAF2EC);
-  static const Color surfaceContainer = Color(0xFFF4EDE6);
-  static const Color surfaceContainerHigh = Color(0xFFEEE7E1);
-  static const Color surfaceContainerHighest = Color(0xFFE8E1DB);
-  static const Color onSurface = Color(0xFF1E1B17);
-  static const Color onSurfaceVariant = Color(0xFF3D4A40);
-  static const Color inverseSurface = Color(0xFF33302C);
-  static const Color inverseOnSurface = Color(0xFFF7EFE9);
-  static const Color outline = Color(0xFF6C7B6F);
-  static const Color outlineVariant = Color(0xFFBBCABD);
+  static const Color surfaceContainerLow = Color(0xFFF1F5F0);
+  static const Color surfaceContainer = Color(0xFFEBF1EB);
+  static const Color surfaceContainerHigh = Color(0xFFE3EBE3);
+  static const Color surfaceContainerHighest = Color(0xFFDAE4DA);
+  static const Color onSurface = Color(0xFF17211A);
+  static const Color onSurfaceVariant = Color(0xFF46564A);
+  static const Color inverseSurface = Color(0xFF2D342F);
+  static const Color inverseOnSurface = Color(0xFFF0F4EF);
+  static const Color outline = Color(0xFF718375);
+  static const Color outlineVariant = Color(0xFFC5D0C6);
   static const Color surfaceTint = Color(0xFF006D40);
   static const Color primary = Color(0xFF006D40);
   static const Color onPrimary = Color(0xFFFFFFFF);
@@ -50,7 +50,7 @@ class AppColors {
   static const Color background = Color(0xFFFFF8F3);
   static const Color onBackground = Color(0xFF1E1B17);
   static const Color surfaceVariant = Color(0xFFE8E1DB);
-  static const Color surfaceSoft = Color(0xFFF8FAFC);
+  static const Color surfaceSoft = Color(0xFFF4F7F3);
   static const Color accentWarm = Color(0xFFFFEADA);
   static const Color successGlow = Color(0x262ECA7F);
 }

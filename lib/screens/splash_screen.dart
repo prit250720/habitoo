@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/theme/app_colors.dart';
 import '../core/theme/app_text_styles.dart';
 import '../utils/shared_prefs_helper.dart';
 
@@ -64,8 +63,10 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: cs.surface,
       body: Center(
         child: FadeTransition(
           opacity: _fadeIn,
@@ -77,19 +78,19 @@ class _SplashScreenState extends State<SplashScreen>
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: cs.primary,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.35),
+                      color: cs.primary.withValues(alpha: 0.25),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),
                   ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.bolt_rounded,
-                  color: AppColors.onPrimary,
+                  color: cs.onPrimary,
                   size: 44,
                 ),
               ),
@@ -99,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
               Text(
                 'Habitoo',
                 style: AppTextStyles.headlineLgMobile.copyWith(
-                  color: AppColors.onSurface,
+                  color: cs.onSurface,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -107,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
               Text(
                 'Build better habits every day',
                 style: AppTextStyles.bodyMd.copyWith(
-                  color: AppColors.onSurfaceVariant,
+                  color: cs.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 40),
@@ -118,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen>
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.5,
-                  color: AppColors.primary,
+                  color: cs.primary,
                 ),
               ),
             ],

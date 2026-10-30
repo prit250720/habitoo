@@ -37,10 +37,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
     return Scaffold(
       backgroundColor: cs.surface,
-      appBar: const AppHeader(
-        avatarUrl:
-            'https://lh3.googleusercontent.com/aida-public/AB6AXuDppiJ6KNSQ_cj88gfQwiq_LsDzxTvZZ-1dK-G543mEbC6y8lYTO6vRDnYE-86S3o6UvZBChHE82jQHmz-vmJxPrzfZrpz36UNnLGHL89O1K2LQzRRfQ3HvtQ0NOPDse7uLs8vnoPyGANcf3uDzFJELkdNQZisUifj1ag1OjCGph7iiAP8a-mpjF31ecAzNfkyaGm_ArNXXWtEG-Tb-S83M8dcmyOnFY_eNebou9pmsMc5mRIWhbaaW',
-      ),
+      appBar: const AppHeader(),
       body: SafeArea(
         child: dashboardAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),

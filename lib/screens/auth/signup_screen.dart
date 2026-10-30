@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_ui_tokens.dart';
 import '../../providers/auth_provider.dart';
@@ -58,11 +57,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState.isLoading;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: cs.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -79,12 +79,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      color: cs.primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.bolt_rounded,
-                      color: AppColors.onPrimary,
+                      color: cs.onPrimary,
                       size: 36,
                     ),
                   ),
@@ -96,7 +96,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   'Create account',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.headlineLgMobile.copyWith(
-                    color: AppColors.onSurface,
+                    color: cs.onSurface,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -104,7 +104,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   'Start building better habits today',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.bodyMd.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -113,14 +113,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLowest,
+                    color: cs.surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(
                       AppUiTokens.cardRadiusLarge,
                     ),
-                    border: Border.all(color: AppColors.surfaceContainerHigh),
+                    border: Border.all(color: cs.surfaceContainerHigh),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.onSurface.withValues(alpha: 0.05),
+                        color: cs.onSurface.withValues(alpha: 0.05),
                         blurRadius: 24,
                         offset: const Offset(0, 10),
                       ),
@@ -141,9 +141,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           textCapitalization: TextCapitalization.words,
                           autocorrect: false,
                           style: AppTextStyles.bodyMd.copyWith(
-                            color: AppColors.onSurface,
+                            color: cs.onSurface,
                           ),
                           decoration: _inputDecoration(
+                            context: context,
                             hint: 'Your full name',
                             prefixIcon: Icons.person_outline_rounded,
                           ),
@@ -165,9 +166,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           textInputAction: TextInputAction.next,
                           autocorrect: false,
                           style: AppTextStyles.bodyMd.copyWith(
-                            color: AppColors.onSurface,
+                            color: cs.onSurface,
                           ),
                           decoration: _inputDecoration(
+                            context: context,
                             hint: 'you@example.com',
                             prefixIcon: Icons.mail_outline_rounded,
                           ),
@@ -194,9 +196,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           obscureText: _obscurePassword,
                           textInputAction: TextInputAction.next,
                           style: AppTextStyles.bodyMd.copyWith(
-                            color: AppColors.onSurface,
+                            color: cs.onSurface,
                           ),
                           decoration: _inputDecoration(
+                            context: context,
                             hint: '••••••••',
                             prefixIcon: Icons.lock_outline_rounded,
                             suffixIcon: GestureDetector(
@@ -207,7 +210,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                 _obscurePassword
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
-                                color: AppColors.outline,
+                                color: cs.outline,
                                 size: 20,
                               ),
                             ),
@@ -233,9 +236,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_) => isLoading ? null : _submit(),
                           style: AppTextStyles.bodyMd.copyWith(
-                            color: AppColors.onSurface,
+                            color: cs.onSurface,
                           ),
                           decoration: _inputDecoration(
+                            context: context,
                             hint: '••••••••',
                             prefixIcon: Icons.lock_outline_rounded,
                             suffixIcon: GestureDetector(
@@ -247,7 +251,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                 _obscureConfirmPassword
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
-                                color: AppColors.outline,
+                                color: cs.outline,
                                 size: 20,
                               ),
                             ),
@@ -272,7 +276,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               vertical: 10,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.errorContainer,
+                              color: cs.errorContainer,
                               borderRadius: BorderRadius.circular(
                                 AppUiTokens.cardRadiusSmall,
                               ),
@@ -281,7 +285,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               children: [
                                 Icon(
                                   Icons.error_outline_rounded,
-                                  color: AppColors.onErrorContainer,
+                                  color: cs.onErrorContainer,
                                   size: 18,
                                 ),
                                 const SizedBox(width: 8),
@@ -289,7 +293,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   child: Text(
                                     _inlineError!,
                                     style: AppTextStyles.labelMd.copyWith(
-                                      color: AppColors.onErrorContainer,
+                                      color: cs.onErrorContainer,
                                     ),
                                   ),
                                 ),
@@ -305,9 +309,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           child: ElevatedButton(
                             onPressed: isLoading ? null : _submit,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: AppColors.onPrimary,
-                              disabledBackgroundColor: AppColors.primary
+                              backgroundColor: cs.primary,
+                              foregroundColor: cs.onPrimary,
+                              disabledBackgroundColor: cs.primary
                                   .withValues(alpha: 0.6),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
@@ -316,18 +320,18 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               ),
                             ),
                             child: isLoading
-                                ? const SizedBox(
+                                ? SizedBox(
                                     width: 22,
                                     height: 22,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2.5,
-                                      color: AppColors.onPrimary,
+                                      color: cs.onPrimary,
                                     ),
                                   )
                                 : Text(
                                     'Sign Up',
                                     style: AppTextStyles.labelMd.copyWith(
-                                      color: AppColors.onPrimary,
+                                      color: cs.onPrimary,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -346,7 +350,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     Text(
                       'Already have an account? ',
                       style: AppTextStyles.bodyMd.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: cs.onSurfaceVariant,
                       ),
                     ),
                     GestureDetector(
@@ -354,10 +358,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       child: Text(
                         'Login',
                         style: AppTextStyles.labelMd.copyWith(
-                          color: AppColors.primary,
+                          color: cs.primary,
                           fontSize: 16,
                           decoration: TextDecoration.underline,
-                          decorationColor: AppColors.primary,
+                          decorationColor: cs.primary,
                         ),
                       ),
                     ),
@@ -372,37 +376,39 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   InputDecoration _inputDecoration({
+    required BuildContext context,
     required String hint,
     required IconData prefixIcon,
     Widget? suffixIcon,
   }) {
+    final cs = Theme.of(context).colorScheme;
     return InputDecoration(
       hintText: hint,
-      hintStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.outline),
-      prefixIcon: Icon(prefixIcon, color: AppColors.outline, size: 20),
+      hintStyle: AppTextStyles.bodyMd.copyWith(color: cs.outline),
+      prefixIcon: Icon(prefixIcon, color: cs.outline, size: 20),
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: AppColors.surfaceContainerLow,
+      fillColor: cs.surfaceContainerLow,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.outlineVariant),
+        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+        borderSide: BorderSide(color: cs.outlineVariant),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.outlineVariant),
+        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+        borderSide: BorderSide(color: cs.outlineVariant),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+        borderSide: BorderSide(color: cs.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.error),
+        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+        borderSide: BorderSide(color: cs.error),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.error, width: 2),
+        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+        borderSide: BorderSide(color: cs.error, width: 2),
       ),
     );
   }
@@ -416,9 +422,10 @@ class _FieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Text(
       label,
-      style: AppTextStyles.labelMd.copyWith(color: AppColors.onSurface),
+      style: AppTextStyles.labelMd.copyWith(color: cs.onSurface),
     );
   }
 }

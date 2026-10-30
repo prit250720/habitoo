@@ -21,8 +21,6 @@ class ProgressScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: cs.surface,
       appBar: AppHeader(
-        avatarUrl:
-            'https://lh3.googleusercontent.com/aida-public/AB6AXuBuw0_khAZCMuTWgiyenyOyBi6nL_Ey55Ki_utNaGBKqUimvxYpZWlY-Ub5fMH3oq2zNGXzw_tfl2iVb9bzIa7LGFsyJKA_NdMKoFHZjpH6QnDgAi1UQQyOfy5YgDtvocQPo9WRvI7J5OPTfvrccH2mYOBE7N2Ya2uEvxmtYVCIlCYd5jJmpeOSm3Xyg3KJj046h18usfIAfqGFNE6DotfG39e398OgILwUUVQKxJmqZz1qkGnzc8ZJ',
         backgroundColor: cs.surface,
       ),
       body: SafeArea(

@@ -113,10 +113,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'alarm',
         builder: (context, state) {
           final args = state.extra as _AlarmArgs;
-          return AlarmScreen(
-            alarmId: args.alarmId,
-            habit: args.habit,
-          );
+          return AlarmScreen(alarmId: args.alarmId, habit: args.habit);
         },
       ),
 
@@ -156,6 +153,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.habits,
                 name: 'habits',
                 builder: (context, state) => const MyHabitsScreen(),
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'add',
+                    name: 'addHabit',
+                    builder: (context, state) => const AddHabitScreen(),
+                  ),
+                  GoRoute(
+                    path: 'edit',
+                    name: 'editHabit',
+                    builder: (context, state) {
+                      final habit = state.extra as HabitModel;
+                      return EditHabitScreen(habit: habit);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -181,23 +193,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-
-      // ── Add habit (outside shell) ──────────────────────────────────────
-      GoRoute(
-        path: AppRoutes.addHabit,
-        name: 'addHabit',
-        builder: (context, state) => const AddHabitScreen(),
-      ),
-
-      // ── Edit habit (outside shell) ─────────────────────────────────────
-      GoRoute(
-        path: AppRoutes.editHabit,
-        name: 'editHabit',
-        builder: (context, state) {
-          final habit = state.extra as HabitModel;
-          return EditHabitScreen(habit: habit);
-        },
-      ),
     ],
   );
 });
@@ -222,7 +217,10 @@ class _AlarmArgs {
 void navigateToAlarm({required int alarmId, required HabitModel habit}) {
   final ctx = rootNavigatorKey.currentContext;
   if (ctx == null) return;
-  ctx.pushNamed('alarm', extra: _AlarmArgs(alarmId: alarmId, habit: habit));
+  ctx.pushNamed(
+    'alarm',
+    extra: _AlarmArgs(alarmId: alarmId, habit: habit),
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -242,11 +240,13 @@ class _AuthNotifier extends ChangeNotifier {
       notifyListeners();
     });
     // Capture the initial value synchronously if already resolved.
-    _currentUser = ref.read(authStateChangesProvider).when(
-      data: (user) => user,
-      loading: () => null,
-      error: (e, st) => null,
-    );
+    _currentUser = ref
+        .read(authStateChangesProvider)
+        .when(
+          data: (user) => user,
+          loading: () => null,
+          error: (e, st) => null,
+        );
   }
 
   dynamic _currentUser;

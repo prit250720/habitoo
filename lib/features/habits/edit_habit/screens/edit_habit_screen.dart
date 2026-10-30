@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_ui_tokens.dart';
 import '../../../../models/habit_model.dart';
+import '../../../../shared/widgets/app_header.dart';
 import '../../providers/habits_provider.dart';
 import '../../add_habit/widgets/category_chip.dart';
 
@@ -236,19 +237,10 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
 
     return Scaffold(
       backgroundColor: cs.surface,
-      appBar: AppBar(
-        backgroundColor: cs.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: cs.onSurface,
-          onPressed: _isSaving ? null : () => context.pop(),
-        ),
-        title: Text(
-          'Edit Habit',
-          style: AppTextStyles.headlineMd.copyWith(color: cs.primary),
-        ),
-        centerTitle: true,
+      appBar: AppHeader(
+        title: 'Edit Habit',
+        onBackTap: () => context.pop(),
+        backEnabled: !_isSaving,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

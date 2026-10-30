@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../controllers/phone_auth_controller.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_ui_tokens.dart';
 
@@ -59,12 +58,12 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
   Future<void> _verifyOtp() async {
     FocusScope.of(context).unfocus();
     final state = ref.read(phoneAuthControllerProvider);
-    final phone =
-        state is PhoneAuthOtpSent ? state.phoneNumber : _phoneController.text.trim();
-    await ref.read(phoneAuthControllerProvider.notifier).verifyOtp(
-          otp: _otpController.text,
-          phoneNumber: phone,
-        );
+    final phone = state is PhoneAuthOtpSent
+        ? state.phoneNumber
+        : _phoneController.text.trim();
+    await ref
+        .read(phoneAuthControllerProvider.notifier)
+        .verifyOtp(otp: _otpController.text, phoneNumber: phone);
   }
 
   void _changeNumber() {
@@ -81,6 +80,7 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     // Listen for success → navigate to dashboard
     ref.listen<PhoneAuthState>(phoneAuthControllerProvider, (_, next) {
       if (next is PhoneAuthSuccess && mounted) {
@@ -91,11 +91,10 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
     final state = ref.watch(phoneAuthControllerProvider);
     final isLoading = state is PhoneAuthLoading;
     final isOtpSent = state is PhoneAuthOtpSent;
-    final errorMessage =
-        state is PhoneAuthError ? state.message : null;
+    final errorMessage = state is PhoneAuthError ? state.message : null;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: cs.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -112,12 +111,12 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      color: cs.primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.bolt_rounded,
-                      color: AppColors.onPrimary,
+                      color: cs.onPrimary,
                       size: 36,
                     ),
                   ),
@@ -128,8 +127,9 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
                 Text(
                   isOtpSent ? 'Verify OTP' : 'Welcome to Habitoo',
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.headlineLgMobile
-                      .copyWith(color: AppColors.onSurface),
+                  style: AppTextStyles.headlineLgMobile.copyWith(
+                    color: cs.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -138,8 +138,9 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
                       ? 'Enter the 6-digit code sent to\n${(state as PhoneAuthOtpSent).phoneNumber}'
                       : 'Sign in with your phone number',
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.bodyMd
-                      .copyWith(color: AppColors.onSurfaceVariant),
+                  style: AppTextStyles.bodyMd.copyWith(
+                    color: cs.onSurfaceVariant,
+                  ),
                 ),
                 const SizedBox(height: 32),
 
@@ -147,15 +148,14 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLowest,
+                    color: cs.surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(
-                        AppUiTokens.cardRadiusLarge),
-                    border:
-                        Border.all(color: AppColors.surfaceContainerHigh),
+                      AppUiTokens.cardRadiusLarge,
+                    ),
+                    border: Border.all(color: cs.surfaceContainerHigh),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            AppColors.onSurface.withValues(alpha: 0.05),
+                        color: cs.onSurface.withValues(alpha: 0.05),
                         blurRadius: 24,
                         offset: const Offset(0, 10),
                       ),
@@ -196,18 +196,19 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
                   children: [
                     Text(
                       'Prefer email login? ',
-                      style: AppTextStyles.bodyMd
-                          .copyWith(color: AppColors.onSurfaceVariant),
+                      style: AppTextStyles.bodyMd.copyWith(
+                        color: cs.onSurfaceVariant,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => context.push('/login'),
                       child: Text(
                         'Sign in with email',
                         style: AppTextStyles.labelMd.copyWith(
-                          color: AppColors.primary,
+                          color: cs.primary,
                           fontSize: 16,
                           decoration: TextDecoration.underline,
-                          decorationColor: AppColors.primary,
+                          decorationColor: cs.primary,
                         ),
                       ),
                     ),
@@ -242,6 +243,7 @@ class _PhoneStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -256,8 +258,9 @@ class _PhoneStep extends StatelessWidget {
             FilteringTextInputFormatter.allow(RegExp(r'[+\d]')),
           ],
           onFieldSubmitted: (_) => isLoading ? null : onSend(),
-          style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurface),
+          style: AppTextStyles.bodyMd.copyWith(color: cs.onSurface),
           decoration: _inputDecoration(
+            context: context,
             hint: '+919876543210',
             prefixIcon: Icons.phone_outlined,
           ),
@@ -265,8 +268,10 @@ class _PhoneStep extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           'Include country code, e.g. +91 for India',
-          style: AppTextStyles.labelMd
-              .copyWith(color: AppColors.onSurfaceVariant, fontSize: 12),
+          style: AppTextStyles.labelMd.copyWith(
+            color: cs.onSurfaceVariant,
+            fontSize: 12,
+          ),
         ),
         const SizedBox(height: 24),
         _PrimaryButton(
@@ -301,6 +306,7 @@ class _OtpStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -315,11 +321,12 @@ class _OtpStep extends StatelessWidget {
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           onFieldSubmitted: (_) => isLoading ? null : onVerify(),
           style: AppTextStyles.bodyMd.copyWith(
-            color: AppColors.onSurface,
+            color: cs.onSurface,
             letterSpacing: 6,
             fontSize: 20,
           ),
           decoration: _inputDecoration(
+            context: context,
             hint: '------',
             prefixIcon: Icons.lock_outline_rounded,
           ).copyWith(counterText: ''),
@@ -335,7 +342,7 @@ class _OtpStep extends StatelessWidget {
           onPressed: isLoading ? null : onChangeNumber,
           child: Text(
             'Change number',
-            style: AppTextStyles.labelMd.copyWith(color: AppColors.primary),
+            style: AppTextStyles.labelMd.copyWith(color: cs.primary),
           ),
         ),
       ],
@@ -353,9 +360,10 @@ class _FieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Text(
       label,
-      style: AppTextStyles.labelMd.copyWith(color: AppColors.onSurface),
+      style: AppTextStyles.labelMd.copyWith(color: cs.onSurface),
     );
   }
 }
@@ -373,31 +381,32 @@ class _PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return SizedBox(
       height: 52,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.onPrimary,
-          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.6),
+          backgroundColor: cs.primary,
+          foregroundColor: cs.onPrimary,
+          disabledBackgroundColor: cs.primary.withValues(alpha: 0.6),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppUiTokens.buttonRadius),
           ),
         ),
         child: isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 22,
                 height: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.5,
-                  color: AppColors.onPrimary,
+                  color: cs.onPrimary,
                 ),
               )
             : Text(
                 label,
                 style: AppTextStyles.labelMd.copyWith(
-                  color: AppColors.onPrimary,
+                  color: cs.onPrimary,
                   fontSize: 16,
                 ),
               ),
@@ -412,23 +421,25 @@ class _ErrorBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.errorContainer,
-        borderRadius:
-            BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+        color: cs.errorContainer,
+        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
       ),
       child: Row(
         children: [
-          Icon(Icons.error_outline_rounded,
-              color: AppColors.onErrorContainer, size: 18),
+          Icon(
+            Icons.error_outline_rounded,
+            color: cs.onErrorContainer,
+            size: 18,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               message,
-              style: AppTextStyles.labelMd
-                  .copyWith(color: AppColors.onErrorContainer),
+              style: AppTextStyles.labelMd.copyWith(color: cs.onErrorContainer),
             ),
           ),
         ],
@@ -438,36 +449,37 @@ class _ErrorBanner extends StatelessWidget {
 }
 
 InputDecoration _inputDecoration({
+  required BuildContext context,
   required String hint,
   required IconData prefixIcon,
 }) {
+  final cs = Theme.of(context).colorScheme;
   return InputDecoration(
     hintText: hint,
-    hintStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.outline),
-    prefixIcon: Icon(prefixIcon, color: AppColors.outline, size: 20),
+    hintStyle: AppTextStyles.bodyMd.copyWith(color: cs.outline),
+    prefixIcon: Icon(prefixIcon, color: cs.outline, size: 20),
     filled: true,
-    fillColor: AppColors.surfaceContainerLow,
-    contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    fillColor: cs.surfaceContainerLow,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: AppColors.outlineVariant),
+      borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+      borderSide: BorderSide(color: cs.outlineVariant),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: AppColors.outlineVariant),
+      borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+      borderSide: BorderSide(color: cs.outlineVariant),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: AppColors.primary, width: 2),
+      borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+      borderSide: BorderSide(color: cs.primary, width: 2),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: AppColors.error),
+      borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+      borderSide: BorderSide(color: cs.error),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: AppColors.error, width: 2),
+      borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+      borderSide: BorderSide(color: cs.error, width: 2),
     ),
   );
 }

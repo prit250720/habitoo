@@ -24,16 +24,8 @@ class ProfileScreen extends ConsumerWidget {
     final notifier = ref.read(profileProvider.notifier);
     final userAsync = ref.watch(userDocProvider);
 
-    final avatarUrl = userAsync.maybeWhen(
-      data: (user) => user?.avatarUrl.isNotEmpty == true
-          ? user!.avatarUrl
-          : profile.avatarUrl,
-      orElse: () => profile.avatarUrl,
-    );
-
     return Scaffold(
       appBar: AppHeader(
-        avatarUrl: avatarUrl,
         backgroundColor: cs.surface,
       ),
       body: SafeArea(

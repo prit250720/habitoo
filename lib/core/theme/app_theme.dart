@@ -24,33 +24,89 @@ class AppTheme {
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: AppUiTokens.appBarHeight,
+        titleTextStyle: AppTextStyles.headlineMd.copyWith(
+          color: colorScheme.onSurface,
+        ),
       ),
       cardTheme: CardThemeData(
-        color: colorScheme.surfaceContainerLow,
+        color: colorScheme.surfaceContainerLowest,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusMedium),
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusLarge),
+          side: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.55),
+          ),
         ),
+        margin: EdgeInsets.zero,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
+          minimumSize: const Size(48, 52),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppUiTokens.buttonRadius),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surfaceContainerLowest,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
+        hintStyle: AppTextStyles.bodyMd.copyWith(
+          color: colorScheme.onSurfaceVariant,
+        ),
+        prefixIconColor: colorScheme.outline,
+        suffixIconColor: colorScheme.outline,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+          borderSide: BorderSide(color: colorScheme.outlineVariant),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
           borderSide: BorderSide(color: colorScheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+          borderSide: BorderSide(color: colorScheme.error),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+          borderSide: BorderSide(color: colorScheme.error, width: 2),
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusMedium),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: colorScheme.inverseSurface,
+        contentTextStyle: AppTextStyles.bodyMd.copyWith(
+          color: colorScheme.onInverseSurface,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusSmall),
+        ),
+      ),
+      dividerTheme: DividerThemeData(
+        color: colorScheme.outlineVariant.withValues(alpha: 0.65),
+        space: 1,
+        thickness: 1,
       ),
     );
   }
