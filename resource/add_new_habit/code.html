@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Habitoo - Create New Habit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hanken+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e8e1db",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb597",
+                    "inverse-primary": "#4be092",
+                    "surface": "#fff8f3",
+                    "on-primary-fixed-variant": "#00522f",
+                    "surface-container-high": "#eee7e1",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#2eca7f",
+                    "surface-container-highest": "#e8e1db",
+                    "success-glow": "rgba(46, 202, 127, 0.15)",
+                    "surface-dim": "#e0d9d3",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#3d4a40",
+                    "surface-container-low": "#faf2ec",
+                    "secondary-container": "#fe6b10",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#ff976a",
+                    "on-error": "#ffffff",
+                    "tertiary": "#984720",
+                    "background": "#fff8f3",
+                    "surface-bright": "#fff8f3",
+                    "on-tertiary-fixed-variant": "#7a300a",
+                    "on-primary-fixed": "#002110",
+                    "inverse-on-surface": "#f7efe9",
+                    "surface-container": "#f4ede6",
+                    "on-secondary-fixed": "#351000",
+                    "on-background": "#1e1b17",
+                    "on-primary-container": "#004f2d",
+                    "primary-fixed-dim": "#4be092",
+                    "outline": "#6c7b6f",
+                    "on-tertiary-fixed": "#360f00",
+                    "surface-soft": "#F8FAFC",
+                    "surface-tint": "#006d40",
+                    "outline-variant": "#bbcabd",
+                    "secondary-fixed-dim": "#ffb695",
+                    "primary-fixed": "#6cfdac",
+                    "error": "#ba1a1a",
+                    "accent-warm": "#FFEADA",
+                    "on-surface": "#1e1b17",
+                    "secondary-fixed": "#ffdbcc",
+                    "secondary": "#a24000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#581f00",
+                    "on-tertiary-container": "#762e08",
+                    "inverse-surface": "#33302c",
+                    "on-secondary-fixed-variant": "#7b2f00",
+                    "on-error-container": "#93000a",
+                    "primary": "#006d40"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "label-sm": ["Hanken Grotesk"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f3;
+            color: #1e1b17;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .soft-shadow {
+            box-shadow: 0 10px 30px rgba(45, 42, 38, 0.05);
+        }
+        .active-ring {
+            box-shadow: 0 0 0 2px #2eca7f;
+        }
+        input:focus {
+            outline: none;
+            border-color: #2eca7f !important;
+            box-shadow: 0 0 0 1px #2eca7f;
+        }
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-40 bg-background flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary font-bold">Create New Habit</h1>
+<div class="w-10 h-10"></div> <!-- Spacer for balance -->
+</header>
+<main class="w-full max-w-2xl px-margin-mobile py-base md:py-gutter flex flex-col gap-8 pb-32">
+<!-- Animated Background Decoration -->
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+
+</div>
+<!-- Section: Name -->
+<section class="flex flex-col gap-4">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="habit-name">HABIT NAME</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl p-4 font-body-lg text-body-lg soft-shadow transition-all" id="habit-name" placeholder="e.g., Morning Meditation" type="text"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-primary opacity-50">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+</div>
+</section>
+<!-- Section: Category Selection (Bento Style) -->
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-end px-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Category</label>
+<span class="text-xs text-primary font-bold">Select one</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+<!-- Health -->
+<button class="category-btn active-ring group flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-lowest border border-primary-container/20 soft-shadow transition-all hover:scale-[1.02] active:scale-95" data-category="Health">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center mb-2 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Health</span>
+</button>
+<!-- Work -->
+<button class="category-btn group flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 soft-shadow transition-all hover:scale-[1.02] active:scale-95" data-category="Work">
+<div class="w-12 h-12 rounded-full bg-secondary-container/10 flex items-center justify-center mb-2 group-hover:bg-secondary-container/20 transition-colors">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">work</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Work</span>
+</button>
+<!-- Personal -->
+<button class="category-btn group flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 soft-shadow transition-all hover:scale-[1.02] active:scale-95" data-category="Personal">
+<div class="w-12 h-12 rounded-full bg-tertiary-container/10 flex items-center justify-center mb-2 group-hover:bg-tertiary-container/20 transition-colors">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Personal</span>
+</button>
+<!-- Growth -->
+<button class="category-btn group flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 soft-shadow transition-all hover:scale-[1.02] active:scale-95" data-category="Growth">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center mb-2 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Growth</span>
+</button>
+<!-- Creative -->
+<button class="category-btn group flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 soft-shadow transition-all hover:scale-[1.02] active:scale-95" data-category="Creative">
+<div class="w-12 h-12 rounded-full bg-secondary-container/10 flex items-center justify-center mb-2 group-hover:bg-secondary-container/20 transition-colors">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">palette</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Creative</span>
+</button>
+<!-- Social -->
+<button class="category-btn group flex flex-col items-center justify-center p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 soft-shadow transition-all hover:scale-[1.02] active:scale-95" data-category="Social">
+<div class="w-12 h-12 rounded-full bg-tertiary-container/10 flex items-center justify-center mb-2 group-hover:bg-tertiary-container/20 transition-colors">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Social</span>
+</button>
+</div>
+</section>
+<!-- Section: Frequency Selection -->
+<section class="flex flex-col gap-4">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider px-1">Frequency</label>
+<div class="flex flex-wrap gap-2">
+<button class="freq-btn bg-primary-container text-on-primary-container font-label-md text-label-md px-6 py-3 rounded-full transition-all active:scale-95">Daily</button>
+<button class="freq-btn bg-surface-container-low text-on-surface-variant border border-outline-variant/30 font-label-md text-label-md px-6 py-3 rounded-full transition-all active:scale-95 hover:bg-surface-container-high">Weekly</button>
+<button class="freq-btn bg-surface-container-low text-on-surface-variant border border-outline-variant/30 font-label-md text-label-md px-6 py-3 rounded-full transition-all active:scale-95 hover:bg-surface-container-high">Custom</button>
+</div>
+<!-- Weekday Selector (Contextual) -->
+<div class="flex justify-between items-center bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 soft-shadow mt-2" id="weekday-selector">
+<button class="day-dot w-9 h-9 flex items-center justify-center rounded-full bg-primary-container text-white font-bold text-xs transition-transform active:scale-90">M</button>
+<button class="day-dot w-9 h-9 flex items-center justify-center rounded-full bg-primary-container text-white font-bold text-xs transition-transform active:scale-90">T</button>
+<button class="day-dot w-9 h-9 flex items-center justify-center rounded-full bg-primary-container text-white font-bold text-xs transition-transform active:scale-90">W</button>
+<button class="day-dot w-9 h-9 flex items-center justify-center rounded-full bg-primary-container text-white font-bold text-xs transition-transform active:scale-90">T</button>
+<button class="day-dot w-9 h-9 flex items-center justify-center rounded-full bg-primary-container text-white font-bold text-xs transition-transform active:scale-90">F</button>
+<button class="day-dot w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant/40 font-bold text-xs transition-transform active:scale-90">S</button>
+<button class="day-dot w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant/40 font-bold text-xs transition-transform active:scale-90">S</button>
+</div>
+</section>
+<!-- Section: Time Picker & Reminders -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-4">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider px-1">Reminder Time</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 font-headline-md text-headline-md soft-shadow appearance-none cursor-pointer" type="time" value="08:00"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-primary">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider px-1">Goal Type</label>
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 flex items-center justify-between soft-shadow">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">done_all</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface leading-none">Simple Check</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Binary completion</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-50">expand_more</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full bg-surface-container-lowest/80 backdrop-blur-lg border-t border-outline-variant/10 px-margin-mobile py-6 z-50 flex justify-center">
+<div class="w-full max-w-2xl">
+<button class="w-full h-14 bg-primary-container text-on-primary-container font-headline-md text-headline-md font-bold rounded-2xl shadow-lg shadow-primary-container/25 flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">save</span>
+                Save Habit
+            </button>
+</div>
+</footer>
+<!-- Interactive Scripts -->
+<script>
+        // Category selection logic
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => {
+                    b.classList.remove('active-ring', 'border-primary-container/20');
+                    b.classList.add('border-outline-variant/30');
+                });
+                btn.classList.add('active-ring', 'border-primary-container/20');
+                btn.classList.remove('border-outline-variant/30');
+            });
+        });
+
+        // Frequency selection logic
+        const freqBtns = document.querySelectorAll('.freq-btn');
+        freqBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                freqBtns.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary-container');
+                    b.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary-container', 'text-on-primary-container');
+                btn.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+            });
+        });
+
+        // Day selection toggle
+        const dayDots = document.querySelectorAll('.day-dot');
+        dayDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                if (dot.classList.contains('bg-primary-container')) {
+                    dot.classList.remove('bg-primary-container', 'text-white');
+                    dot.classList.add('bg-surface-container-high', 'text-on-surface-variant/40');
+                } else {
+                    dot.classList.add('bg-primary-container', 'text-white');
+                    dot.classList.remove('bg-surface-container-high', 'text-on-surface-variant/40');
+                }
+            });
+        });
+
+        // Simple Form Submission Feedback
+        const saveBtn = document.querySelector('footer button');
+        saveBtn.addEventListener('click', () => {
+            saveBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Saving...';
+            setTimeout(() => {
+                saveBtn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Success!';
+                saveBtn.classList.remove('bg-primary-container');
+                saveBtn.classList.add('bg-on-primary-fixed-variant', 'text-white');
+                
+                // Micro-interaction: Haptic simulation via vibration if available
+                if (window.navigator.vibrate) window.navigator.vibrate(50);
+            }, 800);
+        });
+    </script>
+</body></html>

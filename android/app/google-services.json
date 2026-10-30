@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "784999441617",
+    "firebase_url": "https://habitoo-fb165-default-rtdb.firebaseio.com",
+    "project_id": "habitoo-fb165",
+    "storage_bucket": "habitoo-fb165.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784999441617:android:99884fb7594075d60fd1f0",
+        "android_client_info": {
+          "package_name": "com.example.habitoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD58wspGG81iGVWD3793Hkj34Tbt5G7J7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

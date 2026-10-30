@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Habitoo - My Habits</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#1e1b17",
+                    "surface-tint": "#006d40",
+                    "surface-container-highest": "#e8e1db",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-surface": "#1e1b17",
+                    "surface-dim": "#e0d9d3",
+                    "inverse-on-surface": "#f7efe9",
+                    "primary-container": "#2eca7f",
+                    "secondary": "#a24000",
+                    "tertiary-container": "#ff976a",
+                    "primary-fixed-dim": "#4be092",
+                    "primary": "#006d40",
+                    "on-secondary-fixed": "#351000",
+                    "surface-soft": "#F8FAFC",
+                    "on-secondary-container": "#581f00",
+                    "inverse-primary": "#4be092",
+                    "surface-container-low": "#faf2ec",
+                    "outline-variant": "#bbcabd",
+                    "on-tertiary-container": "#762e08",
+                    "on-secondary-fixed-variant": "#7b2f00",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#7a300a",
+                    "on-tertiary-fixed": "#360f00",
+                    "tertiary": "#984720",
+                    "on-primary-container": "#004f2d",
+                    "error": "#ba1a1a",
+                    "outline": "#6c7b6f",
+                    "on-error": "#ffffff",
+                    "surface-container": "#f4ede6",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f3",
+                    "surface": "#fff8f3",
+                    "tertiary-fixed": "#ffdbcd",
+                    "tertiary-fixed-dim": "#ffb597",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#ffb695",
+                    "on-surface-variant": "#3d4a40",
+                    "on-primary-fixed-variant": "#00522f",
+                    "surface-variant": "#e8e1db",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#002110",
+                    "primary-fixed": "#6cfdac",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#fe6b10",
+                    "accent-warm": "#FFEADA",
+                    "inverse-surface": "#33302c",
+                    "success-glow": "rgba(46, 202, 127, 0.15)",
+                    "background": "#fff8f3",
+                    "surface-container-high": "#eee7e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "40px",
+                    "base": "8px",
+                    "margin-mobile": "16px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "label-md": ["Hanken Grotesk"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "label-sm": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        
+        .luminous-ring {
+            position: relative;
+            width: 44px;
+            height: 44px;
+        }
+        
+        .habit-card {
+            box-shadow: 0 10px 30px rgba(45, 42, 38, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .habit-card:active {
+            transform: scale(0.98);
+        }
+
+        .glass-header {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 248, 243, 0.8);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-background dark:bg-background glass-header">
+<div class="flex justify-between items-center px-margin-mobile py-4 w-full md:px-margin-desktop">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity active:scale-95 transition-transform" data-icon="menu">menu</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Habitoo</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="Close-up studio portrait of a professional individual with a friendly smile, shot in high-key lighting against a minimalist warm beige background. The aesthetic is clean and modern, mirroring a high-end wellness app's user profile. Soft teal accents are subtly reflected in the lighting, consistent with the Habitoo brand palette of sustainable growth and clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2yjAQyyKpF1NXcqGtl99kUPPYyXW-eC-eAtdCpQX7vttVcSjxNuQ2JEf6t_FJQZM2F1g9WN3T2E065pk63sWMUyFZKLzFUqd00f__rIHS7IJeLbo8q3VhS1eZM3lc0fWBArkKNlnHs2IySys6_yI-Gr56Wh5Q42k7NmN0fgtlyNOUaEqwgqmTDo1nTeJw9HwWRDTdl0WX-tRLOydtizCKqLoEuUGZA2kY_IXsFRoC_BQRkACQCe5j"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mt-6">
+<!-- Welcome Section -->
+<section class="mb-10">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-2">My Habits</h2>
+<p class="text-on-surface-variant font-body-md">Building momentum, one small win at a time.</p>
+</section>
+<!-- Habits Grid (Asymmetric / Sectional) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Morning Section -->
+<div class="lg:col-span-4 space-y-4">
+<div class="flex items-center gap-2 px-2 mb-2">
+<span class="material-symbols-outlined text-secondary" data-icon="wb_sunny">wb_sunny</span>
+<h3 class="font-headline-md text-headline-md text-secondary">Morning</h3>
+</div>
+<!-- Morning Habit 1 -->
+<div class="habit-card bg-surface-container-lowest rounded-xl p-5 border-l-4 border-secondary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-[20px] mb-1">Meditation</h4>
+<div class="flex gap-2">
+<span class="bg-secondary/10 text-secondary px-3 py-0.5 rounded-full font-label-sm text-label-sm">Health</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="repeat">repeat</span> Daily
+                                </span>
+</div>
+</div>
+<div class="luminous-ring bg-primary-container/20 rounded-full flex items-center justify-center cursor-pointer group hover:bg-primary-container/40 transition-colors">
+<span class="material-symbols-outlined text-primary group-active:scale-90 transition-transform" data-icon="check">check</span>
+</div>
+</div>
+<div class="flex items-center gap-4 border-t border-surface-container pt-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-label-md text-label-md">12 day streak</span>
+</div>
+</div>
+</div>
+<!-- Morning Habit 2 -->
+<div class="habit-card bg-surface-container-lowest rounded-xl p-5 border-l-4 border-secondary opacity-60">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-[20px] mb-1">Hydrate (500ml)</h4>
+<div class="flex gap-2">
+<span class="bg-secondary/10 text-secondary px-3 py-0.5 rounded-full font-label-sm text-label-sm">Vitality</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="repeat">repeat</span> Daily
+                                </span>
+</div>
+</div>
+<div class="luminous-ring bg-primary rounded-full flex items-center justify-center shadow-lg shadow-success-glow">
+<span class="material-symbols-outlined text-white" data-icon="done_all">done_all</span>
+</div>
+</div>
+<div class="flex items-center gap-4 border-t border-surface-container pt-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-label-md text-label-md">45 day streak</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Afternoon Section -->
+<div class="lg:col-span-4 space-y-4">
+<div class="flex items-center gap-2 px-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="light_mode">light_mode</span>
+<h3 class="font-headline-md text-headline-md text-primary">Afternoon</h3>
+</div>
+<!-- Afternoon Habit 1 -->
+<div class="habit-card bg-surface-container-lowest rounded-xl p-5 border-l-4 border-primary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-[20px] mb-1">Deep Work Block</h4>
+<div class="flex gap-2">
+<span class="bg-primary/10 text-primary px-3 py-0.5 rounded-full font-label-sm text-label-sm">Work</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span> Weekdays
+                                </span>
+</div>
+</div>
+<div class="luminous-ring bg-primary-container/20 rounded-full flex items-center justify-center cursor-pointer group">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+</div>
+</div>
+<div class="flex items-center gap-4 border-t border-surface-container pt-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-label-md text-label-md">8 day streak</span>
+</div>
+</div>
+</div>
+<!-- Afternoon Habit 2 -->
+<div class="habit-card bg-surface-container-lowest rounded-xl p-5 border-l-4 border-primary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-[20px] mb-1">Quick Stretch</h4>
+<div class="flex gap-2">
+<span class="bg-primary/10 text-primary px-3 py-0.5 rounded-full font-label-sm text-label-sm">Fitness</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="repeat">repeat</span> Daily
+                                </span>
+</div>
+</div>
+<div class="luminous-ring bg-primary-container/20 rounded-full flex items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-primary" data-icon="check">check</span>
+</div>
+</div>
+<div class="flex items-center gap-4 border-t border-surface-container pt-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-label-md text-label-md">2 day streak</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Evening Section -->
+<div class="lg:col-span-4 space-y-4">
+<div class="flex items-center gap-2 px-2 mb-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="bedtime">bedtime</span>
+<h3 class="font-headline-md text-headline-md text-tertiary">Evening</h3>
+</div>
+<!-- Evening Habit 1 -->
+<div class="habit-card bg-surface-container-lowest rounded-xl p-5 border-l-4 border-tertiary transition-all">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-[20px] mb-1">Journaling</h4>
+<div class="flex gap-2">
+<span class="bg-tertiary/10 text-tertiary px-3 py-0.5 rounded-full font-label-sm text-label-sm">Mind</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="repeat">repeat</span> Daily
+                                </span>
+</div>
+</div>
+<div class="luminous-ring bg-primary-container/20 rounded-full flex items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-primary" data-icon="check">check</span>
+</div>
+</div>
+<div class="flex items-center gap-4 border-t border-surface-container pt-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-label-md text-label-md">21 day streak</span>
+</div>
+</div>
+</div>
+<!-- Stats Card (Bento Style) -->
+<div class="bg-primary text-white rounded-xl p-5 shadow-lg flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="font-headline-md text-[18px]">Weekly Goal</span>
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</div>
+<div>
+<div class="text-display-lg font-display-lg leading-none">85%</div>
+<div class="font-label-md text-white/80 mt-1">Consistency increased by 4%</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Insights Banner -->
+<section class="mt-12 bg-accent-warm/50 border border-secondary-container/20 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
+<div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="psychology">psychology</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-background">Sustainable Momentum</h4>
+<p class="text-on-surface-variant font-body-md mt-1">You've completed 4 morning habits 7 days in a row. Small actions lead to massive transformations. Keep the teal glow alive!</p>
+</div>
+<button class="ml-auto bg-primary text-white px-6 py-3 rounded-full font-label-md hover:opacity-90 transition-opacity whitespace-nowrap">
+                View Reports
+            </button>
+</section>
+</main>
+<!-- FAB: Add New Habit -->
+<button class="fixed bottom-24 right-6 md:right-10 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-transform z-50">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full flex justify-around items-center px-4 py-3 bg-surface-container-lowest dark:bg-inverse-surface z-50 rounded-t-xl shadow-[0_-10px_30px_rgba(45,42,38,0.05)]">
+<!-- Today Tab -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-90 transition-transform" data-icon="check_circle">check_circle</span>
+<span class="font-label-sm text-label-sm mt-1">Today</span>
+</a>
+<!-- Habits Tab (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="format_list_bulleted" style="font-variation-settings: 'FILL' 1;">format_list_bulleted</span>
+<span class="font-label-sm text-label-sm">Habits</span>
+</a>
+<!-- Stats Tab -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-90 transition-transform" data-icon="query_stats">query_stats</span>
+<span class="font-label-sm text-label-sm mt-1">Stats</span>
+</a>
+<!-- Profile Tab -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-90 transition-transform" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('.habit-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Future logic for habit completion animation
+                const ring = this.querySelector('.luminous-ring');
+                if (ring) {
+                    ring.classList.toggle('bg-primary');
+                    ring.classList.toggle('bg-primary-container/20');
+                    const icon = ring.querySelector('.material-symbols-outlined');
+                    if (icon.textContent === 'check' || icon.textContent === 'schedule') {
+                        icon.textContent = 'done_all';
+                        icon.classList.add('text-white');
+                        icon.classList.remove('text-primary');
+                        ring.classList.add('shadow-lg', 'shadow-success-glow');
+                        this.classList.add('opacity-60');
+                    } else {
+                        icon.textContent = 'check';
+                        icon.classList.remove('text-white');
+                        icon.classList.add('text-primary');
+                        ring.classList.remove('shadow-lg', 'shadow-success-glow');
+                        this.classList.remove('opacity-60');
+                    }
+                }
+            });
+        });
+
+        // Floating Action Button interaction
+        const fab = document.querySelector('button.fixed.bottom-24');
+        fab.addEventListener('click', () => {
+            // Simple visual feedback
+            fab.classList.add('bg-primary');
+            setTimeout(() => fab.classList.remove('bg-primary'), 200);
+        });
+    </script>
+</body></html>

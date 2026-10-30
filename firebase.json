@@ -1,0 +1,31 @@
+{
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "habitoo-fb165",
+          "appId": "1:784999441617:android:99884fb7594075d60fd1f0",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "habitoo-fb165",
+          "configurations": {
+            "android": "1:784999441617:android:99884fb7594075d60fd1f0",
+            "ios": "1:784999441617:ios:d1dcd9c63f5a8b8f0fd1f0",
+            "macos": "1:784999441617:ios:d1dcd9c63f5a8b8f0fd1f0",
+            "web": "1:784999441617:web:e52c49ee60ad2b3e0fd1f0",
+            "windows": "1:784999441617:web:859f7908292091ac0fd1f0"
+          }
+        }
+      }
+    }
+  }
+}
