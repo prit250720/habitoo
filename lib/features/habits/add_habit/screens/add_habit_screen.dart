@@ -74,6 +74,18 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
       label: 'Duration',
       subtitle: 'Spend a set amount of time',
     ),
+    _GoalOption(
+      type: GoalType.tapLocations,
+      icon: Icons.touch_app_outlined,
+      label: 'Tap 10 Spots',
+      subtitle: 'Tap ten different spots on the alarm screen',
+    ),
+    _GoalOption(
+      type: GoalType.qrScan,
+      icon: Icons.qr_code_scanner,
+      label: 'Scan Profile QR',
+      subtitle: 'Scan your unique Profile QR code to stop the alarm',
+    ),
   ];
 
   @override
@@ -166,6 +178,7 @@ class _AddHabitScreenState extends ConsumerState<AddHabitScreen> {
       setState(() {
         _selectedTime =
             '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+        _selectedPeriod = habitPeriodForReminderTime(_selectedTime);
       });
     }
   }

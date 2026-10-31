@@ -139,32 +139,21 @@ class HabitListTile extends StatelessWidget {
     ColorScheme cs,
     Color periodColor,
   ) {
-    showModalBottomSheet<void>(
+    showDialog<void>(
       context: context,
-      backgroundColor: cs.surfaceContainerLow,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (_) {
-        return SafeArea(
+      builder: (dialogContext) {
+        return Dialog(
+          backgroundColor: cs.surfaceContainerLow,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // ── Drag handle ─────────────────────────────────────────
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: cs.onSurfaceVariant.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-                // ── Habit name header ────────────────────────────────────
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
                     habit.name,
                     style: AppTextStyles.headlineMd.copyWith(
@@ -175,7 +164,6 @@ class HabitListTile extends StatelessWidget {
                   ),
                 ),
                 Divider(color: cs.outlineVariant),
-                const SizedBox(height: 4),
                 // ── Edit ────────────────────────────────────────────────
                 ListTile(
                   enabled: onEdit != null,
@@ -209,7 +197,7 @@ class HabitListTile extends StatelessWidget {
                   onTap: onEdit == null
                       ? null
                       : () {
-                          Navigator.of(context).pop();
+                          Navigator.of(dialogContext).pop();
                           onEdit?.call();
                         },
                 ),
@@ -242,7 +230,7 @@ class HabitListTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(dialogContext).pop();
                       _confirmDelete(context, cs);
                     },
                   ),

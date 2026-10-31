@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../models/habit_completion_model.dart';
 import '../../models/habit_model.dart';
 
 /// Manages `users/{uid}/habits/{habitId}` in Firestore.
@@ -35,6 +36,20 @@ class HabitRepository {
         .snapshots()
         .map(
           (qs) => qs.docs.map((doc) => HabitModel.fromFirestore(doc)).toList(),
+        );
+  }
+
+  /// Streams the user's recorded habit completions for live progress stats.
+  Stream<List<HabitCompletionModel>> watchCompletionHistory(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('habitCompletionHistory')
+        .snapshots()
+        .map(
+          (qs) => qs.docs
+              .map((doc) => HabitCompletionModel.fromFirestore(doc))
+              .toList(),
         );
   }
 

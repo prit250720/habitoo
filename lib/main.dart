@@ -225,6 +225,12 @@ class _AlarmWatcherState extends State<AlarmWatcher> {
   Future<void> _onAlarmRing(AlarmSettings settings) async {
     if (_lastHandledAlarmId == settings.id) return;
     _lastHandledAlarmId = settings.id;
+    final appIsInForeground =
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+
+    if (appIsInForeground) {
+      await AlarmService.cancelAlarmNotification(settings.id);
+    }
 
     // Look up which habit owns this alarm.
     final habitId = await AlarmService.habitIdForAlarm(settings.id);
@@ -241,9 +247,14 @@ class _AlarmWatcherState extends State<AlarmWatcher> {
       return;
     }
 
-    // Keep the alarm package's audio playing. Only show a notification fallback
-    // if the app is backgrounded or the alarm UI is not available.
-    if (mounted) {
+    // The alarm screen replaces the notification while the app is open.
+    final appIsStillInForeground =
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+    if (appIsStillInForeground) {
+      if (!appIsInForeground) {
+        await AlarmService.cancelAlarmNotification(settings.id);
+      }
+    } else if (mounted) {
       unawaited(
         AlarmService.showAlarmNotification(alarmId: settings.id, habit: habit),
       );

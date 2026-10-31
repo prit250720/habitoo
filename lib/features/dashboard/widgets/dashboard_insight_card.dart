@@ -4,7 +4,25 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/theme/app_ui_tokens.dart';
 
 class DashboardInsightCard extends StatelessWidget {
-  const DashboardInsightCard({super.key});
+  const DashboardInsightCard({
+    super.key,
+    required this.completedCount,
+    required this.totalCount,
+  });
+
+  final int completedCount;
+  final int totalCount;
+
+  String get _description {
+    if (totalCount == 0) {
+      return 'No habits are scheduled for today. Add a habit or review your schedule to get started.';
+    }
+    if (completedCount == totalCount) {
+      return 'You have completed all $totalCount habits scheduled for today. Great job staying consistent!';
+    }
+    final remaining = totalCount - completedCount;
+    return '$remaining ${remaining == 1 ? 'habit is' : 'habits are'} left for today. A small step now keeps your routine moving.';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +57,14 @@ class DashboardInsightCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Sustainable Insight',
+                  'Today\'s Insight',
                   style: AppTextStyles.headlineMd.copyWith(
                     color: cs.onSurface,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Users who complete their reading habit before 9 PM are 35% more likely to maintain a 7-day streak. Try setting a reminder for 8:30 PM today.',
+                  _description,
                   style: AppTextStyles.bodyMd.copyWith(
                     color: cs.onSurfaceVariant,
                   ),

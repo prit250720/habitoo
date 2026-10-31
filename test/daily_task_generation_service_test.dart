@@ -44,5 +44,21 @@ void main() {
         isTrue,
       );
     });
+
+    test('rotates task prompts on consecutive days and is stable per date', () {
+      List<String> titlesFor(DateTime date) {
+        return DailyTaskGenerationService.generateTasks(
+          uid: 'user-1',
+          habits: const [],
+          date: date,
+        ).map((task) => task.title).toList();
+      }
+
+      final today = DateTime(2026, 7, 31);
+      final todayTitles = titlesFor(today);
+
+      expect(titlesFor(today.add(const Duration(days: 1))), isNot(todayTitles));
+      expect(titlesFor(today), todayTitles);
+    });
   });
 }

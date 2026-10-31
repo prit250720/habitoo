@@ -76,6 +76,18 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
       label: 'Duration',
       subtitle: 'Spend a set amount of time',
     ),
+    _GoalOption(
+      type: GoalType.tapLocations,
+      icon: Icons.touch_app_outlined,
+      label: 'Tap 10 Spots',
+      subtitle: 'Tap ten different spots on the alarm screen',
+    ),
+    _GoalOption(
+      type: GoalType.qrScan,
+      icon: Icons.qr_code_scanner,
+      label: 'Scan Profile QR',
+      subtitle: 'Scan your unique Profile QR code to stop the alarm',
+    ),
   ];
 
   @override
@@ -88,7 +100,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
     _selectedFrequency = h.frequency;
     _selectedDays = List<int>.from(h.selectedDays);
     _selectedTime = h.reminderTime;
-    _selectedPeriod = h.period;
+    _selectedPeriod = habitPeriodForReminderTime(h.reminderTime);
     _selectedGoalType = h.goalType;
     _selectedColor = h.accentColor;
     _selectedIcon = h.icon;
@@ -178,6 +190,7 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
       setState(() {
         _selectedTime =
             '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+        _selectedPeriod = habitPeriodForReminderTime(_selectedTime);
       });
     }
   }
@@ -590,11 +603,11 @@ class _EditHabitScreenState extends ConsumerState<EditHabitScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(
+        padding: EdgeInsets.fromLTRB(
           AppUiTokens.screenPadding,
           0,
           AppUiTokens.screenPadding,
-          24,
+          112 + MediaQuery.paddingOf(context).bottom,
         ),
         child: ElevatedButton.icon(
           onPressed: _isSaving ? null : _saveHabit,

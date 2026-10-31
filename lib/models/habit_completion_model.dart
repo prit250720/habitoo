@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /// Stored at: `users/{uid}/habits/{habitId}/completionHistory/{dateKey}`
 class HabitCompletionModel {
   const HabitCompletionModel({
+    this.habitId,
     required this.dateKey, // 'YYYY-MM-DD' format
     required this.wasCompleted,
     required this.completedAt, // When the user marked/auto-marked as complete
@@ -11,6 +12,7 @@ class HabitCompletionModel {
     this.alarmClosedAt, // When alarm was closed (triggers auto-complete)
   });
 
+  final String? habitId;
   final String dateKey;
   final bool wasCompleted;
   final DateTime completedAt;
@@ -23,7 +25,8 @@ class HabitCompletionModel {
     final d = snap.data() ?? {};
 
     return HabitCompletionModel(
-      dateKey: snap.id, // Document ID is the date key
+      habitId: d['habitId'] as String?,
+      dateKey: (d['dateKey'] as String?) ?? snap.id,
       wasCompleted: (d['wasCompleted'] as bool?) ?? false,
       completedAt: (d['completedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       autoCompleted: (d['autoCompleted'] as bool?) ?? false,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/theme/app_ui_tokens.dart';
@@ -71,7 +70,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'You\'ve stayed consistent. Keep the momentum going!',
+                state.totalCount == 0
+                    ? 'Add a habit to start building your daily routine.'
+                    : state.completedCount == state.totalCount
+                    ? 'All ${state.totalCount} habits done today. Great work!'
+                    : '${state.completedCount} of ${state.totalCount} habits done today. Keep the momentum going!',
                 style: AppTextStyles.bodyMd.copyWith(
                   color: cs.onSurfaceVariant,
                 ),
@@ -141,7 +144,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         ),
                       )
                     else
-                      ...state.habits.map(
+                      ...state.todaysHabits.map(
                         (habit) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: DashboardHabitCard(
@@ -247,19 +250,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: AppUiTokens.sectionSpacing),
-              const DashboardInsightCard(),
+              DashboardInsightCard(
+                completedCount: state.completedCount,
+                totalCount: state.totalCount,
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.pushNamed('addHabit'),
-        backgroundColor: cs.primary,
-        foregroundColor: cs.onPrimary,
-        elevation: 4,
-        child: const Icon(Icons.add, size: 28),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

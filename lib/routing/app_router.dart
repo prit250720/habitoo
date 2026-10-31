@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -121,17 +122,38 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           final index = navigationShell.currentIndex;
-          return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            body: navigationShell,
-            bottomNavigationBar: AppBottomNav(
-              currentIndex: index,
-              onDestinationSelected: (value) {
-                navigationShell.goBranch(
-                  value,
-                  initialLocation: value == index,
-                );
-              },
+          final brightness = Theme.of(context).brightness;
+          return AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle(
+              systemNavigationBarColor: Colors.transparent,
+              systemNavigationBarDividerColor: Colors.transparent,
+              systemNavigationBarContrastEnforced: false,
+              systemNavigationBarIconBrightness: brightness == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark,
+            ),
+            child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              extendBody: true,
+              body: Stack(
+                children: [
+                  navigationShell,
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: AppBottomNav(
+                      currentIndex: index,
+                      onDestinationSelected: (value) {
+                        navigationShell.goBranch(
+                          value,
+                          initialLocation: value == index,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

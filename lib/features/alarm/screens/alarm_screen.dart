@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/theme/app_ui_tokens.dart';
+import '../../../core/utils/profile_qr_code.dart';
 import '../../../data/repositories/habit_repository.dart';
+import '../../../features/alarm/widgets/profile_qr_scanner.dart';
 import '../../../models/habit_model.dart';
 import '../../../services/alarm_service.dart';
 
@@ -30,6 +32,10 @@ class _AlarmScreenState extends State<AlarmScreen>
   // ── Counter goal ──────────────────────────────────────────────────────────
   static const int _counterTarget = 10;
   int _counterValue = 0;
+
+  // ── Tap locations goal ────────────────────────────────────────────────────
+  static const int _tapLocationsTarget = 10;
+  final Set<int> _visitedTapLocations = {};
 
   // ── Duration goal ─────────────────────────────────────────────────────────
   static const int _durationSeconds = 60; // 1 minute
@@ -86,6 +92,42 @@ class _AlarmScreenState extends State<AlarmScreen>
         _stopAlarmAndPop();
       }
     });
+  }
+
+  void _tapLocation(int location) {
+    if (_goalComplete || _visitedTapLocations.contains(location)) return;
+
+    final completesGoal =
+        _visitedTapLocations.length + 1 >= _tapLocationsTarget;
+    setState(() {
+      _visitedTapLocations.add(location);
+      _goalComplete = completesGoal;
+    });
+    if (completesGoal) _stopAlarmAndPop();
+  }
+
+  Future<void> _scanProfileQr() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sign in to scan your Profile QR code.')),
+      );
+      return;
+    }
+
+    final didScan = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => ProfileQrScanner(
+        expectedData: ProfileQrCode.dataForUid(uid),
+      ),
+    );
+
+    if (didScan == true && mounted && !_goalComplete) {
+      setState(() => _goalComplete = true);
+      await _stopAlarmAndPop();
+    }
   }
 
   void _startTimer() {
@@ -234,6 +276,18 @@ class _AlarmScreenState extends State<AlarmScreen>
           accentColor: accentColor,
           onStart: _startTimer,
         );
+      case GoalType.tapLocations:
+        return _TapLocationsWidget(
+          visitedLocations: _visitedTapLocations,
+          target: _tapLocationsTarget,
+          accentColor: accentColor,
+          onTapLocation: _tapLocation,
+        );
+      case GoalType.qrScan:
+        return _ProfileQrGoalWidget(
+          accentColor: accentColor,
+          onScan: _scanProfileQr,
+        );
     }
   }
 
@@ -245,6 +299,10 @@ class _AlarmScreenState extends State<AlarmScreen>
         return 'Tap $_counterTarget times to stop the alarm';
       case GoalType.duration:
         return 'Run the timer to stop the alarm';
+      case GoalType.tapLocations:
+        return 'Tap all $_tapLocationsTarget different spots to stop the alarm';
+      case GoalType.qrScan:
+        return 'Scan your unique Profile QR code to stop the alarm';
     }
   }
 }
@@ -576,6 +634,121 @@ class _DurationWidget extends StatelessWidget {
               ),
             ],
           ),
+      ],
+    );
+  }
+}
+
+// ── Tap 10 different locations ───────────────────────────────────────────────
+
+class _TapLocationsWidget extends StatelessWidget {
+  const _TapLocationsWidget({
+    required this.visitedLocations,
+    required this.target,
+    required this.accentColor,
+    required this.onTapLocation,
+  });
+
+  final Set<int> visitedLocations;
+  final int target;
+  final Color accentColor;
+  final ValueChanged<int> onTapLocation;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return Column(
+      children: [
+        Text(
+          '${visitedLocations.length} of $target spots',
+          style: AppTextStyles.labelMd.copyWith(color: cs.onSurfaceVariant),
+        ),
+        const SizedBox(height: 16),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final spotSize = ((constraints.maxWidth - 32) / 5).clamp(
+              40.0,
+              56.0,
+            );
+            return Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: List.generate(target, (index) {
+                final isVisited = visitedLocations.contains(index);
+                return GestureDetector(
+                  onTap: isVisited ? null : () => onTapLocation(index),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 160),
+                    width: spotSize,
+                    height: spotSize,
+                    decoration: BoxDecoration(
+                      color: isVisited
+                          ? accentColor
+                          : cs.surfaceContainerHigh,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isVisited ? accentColor : cs.outlineVariant,
+                        width: 2,
+                      ),
+                    ),
+                    child: Icon(
+                      isVisited ? Icons.check_rounded : Icons.touch_app,
+                      color: isVisited ? Colors.white : cs.onSurfaceVariant,
+                      size: 22,
+                    ),
+                  ),
+                );
+              }),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Tap each spot once',
+          style: AppTextStyles.labelSm.copyWith(color: cs.onSurfaceVariant),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Profile QR scan ─────────────────────────────────────────────────────────
+
+class _ProfileQrGoalWidget extends StatelessWidget {
+  const _ProfileQrGoalWidget({
+    required this.accentColor,
+    required this.onScan,
+  });
+
+  final Color accentColor;
+  final VoidCallback onScan;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return Column(
+      children: [
+        Icon(Icons.qr_code_scanner, size: 64, color: accentColor),
+        const SizedBox(height: 16),
+        Text(
+          'Scan your Profile QR code using this camera',
+          textAlign: TextAlign.center,
+          style: AppTextStyles.labelMd.copyWith(color: cs.onSurfaceVariant),
+        ),
+        const SizedBox(height: 20),
+        FilledButton.icon(
+          onPressed: onScan,
+          icon: const Icon(Icons.camera_alt_outlined),
+          label: const Text('Open QR Scanner'),
+          style: FilledButton.styleFrom(
+            backgroundColor: accentColor,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          ),
+        ),
       ],
     );
   }

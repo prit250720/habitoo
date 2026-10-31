@@ -2,8 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/utils/habit_icons.dart';
 
 enum HabitPeriod { morning, afternoon, evening, night }
+
+HabitPeriod habitPeriodForReminderTime(String reminderTime) {
+  final hour = int.tryParse(reminderTime.split(':').first);
+  if (hour == null || hour < 0 || hour > 23) return HabitPeriod.morning;
+  if (hour >= 20 || hour < 5) return HabitPeriod.night;
+  if (hour >= 5 && hour < 12) return HabitPeriod.morning;
+  return HabitPeriod.evening;
+}
 
 /// Which days of the week the habit should repeat on (0 = Monday … 6 = Sunday).
 typedef SelectedDays = List<int>;
@@ -13,6 +22,8 @@ enum GoalType {
   simpleCheck, // Binary done / not-done
   counter, // Hit a numeric target
   duration, // Spend N minutes
+  tapLocations, // Tap ten distinct screen locations
+  qrScan, // Scan the user's profile QR code
 }
 
 /// Persistent habit model stored at `users/{uid}/habits/{habitId}` in Firestore.
@@ -69,7 +80,17 @@ class HabitModel {
   // ---------------------------------------------------------------------------
 
   Color get accentColor => Color(accentColorValue);
-  IconData get icon => IconData(iconCodePoint, fontFamily: 'MaterialIcons');
+
+  /// Returns the [IconData] for this habit's stored code-point.
+  ///
+  /// Resolved via [HabitIcons.fromCodePoint] so the tree-shaker can statically
+  /// determine the full set of required glyphs from [HabitIcons].
+  IconData get icon => HabitIcons.fromCodePoint(iconCodePoint);
+
+  /// Convenience static — use when you need an [IconData] from a raw
+  /// code-point outside of a [HabitModel] instance.
+  static IconData iconDataFromCodePoint(int codePoint) =>
+      HabitIcons.fromCodePoint(codePoint);
 
   bool isCompletedForDate(DateTime date) {
     if (completedOnDate == null) return false;
@@ -214,6 +235,10 @@ class HabitModel {
         return GoalType.counter;
       case 'duration':
         return GoalType.duration;
+      case 'tapLocations':
+        return GoalType.tapLocations;
+      case 'qrScan':
+        return GoalType.qrScan;
       default:
         return GoalType.simpleCheck;
     }

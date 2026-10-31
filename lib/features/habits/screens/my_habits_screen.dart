@@ -116,12 +116,6 @@ class MyHabitsScreen extends ConsumerWidget {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.pushNamed('addHabit'),
-        backgroundColor: cs.primaryContainer,
-        foregroundColor: cs.onPrimaryContainer,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 

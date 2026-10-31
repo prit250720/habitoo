@@ -31,9 +31,7 @@ void _showXpSnackbar(BuildContext context, int xpAmount) {
           const SizedBox(width: 10),
           Text(
             '+$xpAmount XP earned!',
-            style: AppTextStyles.labelMd.copyWith(
-              color: cs.onPrimaryContainer,
-            ),
+            style: AppTextStyles.labelMd.copyWith(color: cs.onPrimaryContainer),
           ),
           const Spacer(),
           Icon(
@@ -78,15 +76,27 @@ class DailyTaskCard extends ConsumerWidget {
     if (result.xpAwarded) _showXpSnackbar(context, result.xpAmount);
   }
 
-  void _showDetailSheet(BuildContext context, WidgetRef ref) {
+  void _showDetailDialog(BuildContext context, WidgetRef ref) {
     HapticFeedback.mediumImpact();
-    showModalBottomSheet(
+    showDialog<void>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetCtx) => _DailyTaskDetailSheet(
-        task: task,
-        onToggle: (ctx) => _toggle(ctx, ref, popAfter: true),
+      builder: (dialogCtx) => Dialog(
+        backgroundColor: Theme.of(dialogCtx).colorScheme.surfaceContainerLowest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusLarge),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(dialogCtx).height * 0.8,
+          ),
+          child: SingleChildScrollView(
+            child: _DailyTaskDetailContent(
+              task: task,
+              onToggle: (ctx) => _toggle(ctx, ref, popAfter: true),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -97,7 +107,7 @@ class DailyTaskCard extends ConsumerWidget {
     final isCompleted = task.completed;
 
     return GestureDetector(
-      onLongPress: () => _showDetailSheet(context, ref),
+      onLongPress: () => _showDetailDialog(context, ref),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
@@ -210,19 +220,15 @@ class DailyTaskCard extends ConsumerWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Detail bottom sheet
+// Centered task detail dialog
 // ---------------------------------------------------------------------------
 
-class _DailyTaskDetailSheet extends StatelessWidget {
-  const _DailyTaskDetailSheet({
-    required this.task,
-    required this.onToggle,
-  });
+class _DailyTaskDetailContent extends StatelessWidget {
+  const _DailyTaskDetailContent({required this.task, required this.onToggle});
 
   final DailyTaskModel task;
 
-  /// Called with the sheet's own [BuildContext] so the snackbar mounts on
-  /// the correct scaffold after the sheet is popped.
+  /// Called with the dialog's [BuildContext] so it can be closed after toggling.
   final Future<void> Function(BuildContext ctx) onToggle;
 
   @override
@@ -230,154 +236,132 @@ class _DailyTaskDetailSheet extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final isCompleted = task.completed;
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      decoration: BoxDecoration(
-        color: cs.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusLarge),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Drag handle
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(top: 12, bottom: 20),
-              decoration: BoxDecoration(
-                color: cs.outlineVariant,
-                borderRadius: BorderRadius.circular(999),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Status badge row
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  _statusBadge(cs, isCompleted),
+                  _pill(task.category, cs),
+                  _xpBadge(cs),
+                ],
               ),
-            ),
-          ),
+              const SizedBox(height: 20),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Status badge row
-                Row(
-                  children: [
-                    _statusBadge(cs, isCompleted),
-                    const Spacer(),
-                    _pill(task.category, cs),
-                    const SizedBox(width: 8),
-                    _xpBadge(cs),
-                  ],
+              // Title
+              Text(
+                task.title,
+                style: AppTextStyles.headlineMd.copyWith(
+                  color: cs.onSurface,
+                  decoration: isCompleted
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                  decorationColor: cs.onSurface,
+                  decorationThickness: 2,
                 ),
-                const SizedBox(height: 20),
+              ),
 
-                // Title
+              // Description
+              if (task.description.isNotEmpty) ...[
+                const SizedBox(height: 12),
                 Text(
-                  task.title,
-                  style: AppTextStyles.headlineMd.copyWith(
-                    color: cs.onSurface,
-                    decoration: isCompleted
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                    decorationColor: cs.onSurface,
-                    decorationThickness: 2,
-                  ),
-                ),
-
-                // Description
-                if (task.description.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    task.description,
-                    style: AppTextStyles.bodyMd
-                        .copyWith(color: cs.onSurfaceVariant),
-                  ),
-                ],
-
-                const SizedBox(height: 24),
-                Divider(color: cs.surfaceContainerHighest, height: 1),
-                const SizedBox(height: 20),
-
-                // Meta rows
-                _metaRow(
-                  cs,
-                  icon: Icons.calendar_today_outlined,
-                  label: 'Date',
-                  value: task.date.isNotEmpty ? task.date : 'Today',
-                ),
-                if (task.habitId != null && task.habitId!.isNotEmpty) ...[
-                  const SizedBox(height: 14),
-                  _metaRow(
-                    cs,
-                    icon: Icons.loop_outlined,
-                    label: 'Linked Habit',
-                    value: task.habitId!,
-                  ),
-                ],
-                if (task.createdAt != null) ...[
-                  const SizedBox(height: 14),
-                  _metaRow(
-                    cs,
-                    icon: Icons.access_time_outlined,
-                    label: 'Created',
-                    value: _formatDateTime(task.createdAt!),
-                  ),
-                ],
-
-                // XP awarded indicator
-                if (task.xpEverAwarded) ...[
-                  const SizedBox(height: 14),
-                  _metaRow(
-                    cs,
-                    icon: Icons.bolt_rounded,
-                    label: 'XP Status',
-                    value: '+${task.xp} XP already credited',
-                  ),
-                ],
-
-                const SizedBox(height: 28),
-
-                // Action button
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: FilledButton.icon(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: isCompleted
-                          ? cs.surfaceContainerHigh
-                          : cs.primary,
-                      foregroundColor: isCompleted
-                          ? cs.onSurfaceVariant
-                          : cs.onPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppUiTokens.buttonRadius,
-                        ),
-                      ),
-                    ),
-                    onPressed: () => onToggle(context),
-                    icon: Icon(
-                      isCompleted
-                          ? Icons.undo_rounded
-                          : Icons.check_circle_outline_rounded,
-                      size: 20,
-                    ),
-                    label: Text(
-                      isCompleted
-                          ? 'Mark as Incomplete'
-                          : 'Mark as Complete',
-                      style: AppTextStyles.labelMd.copyWith(
-                        color: isCompleted
-                            ? cs.onSurfaceVariant
-                            : cs.onPrimary,
-                      ),
-                    ),
+                  task.description,
+                  style: AppTextStyles.bodyMd.copyWith(
+                    color: cs.onSurfaceVariant,
                   ),
                 ),
               ],
-            ),
+
+              const SizedBox(height: 24),
+              Divider(color: cs.surfaceContainerHighest, height: 1),
+              const SizedBox(height: 20),
+
+              // Meta rows
+              _metaRow(
+                cs,
+                icon: Icons.calendar_today_outlined,
+                label: 'Date',
+                value: task.date.isNotEmpty ? task.date : 'Today',
+              ),
+              if (task.habitId != null && task.habitId!.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                _metaRow(
+                  cs,
+                  icon: Icons.loop_outlined,
+                  label: 'Linked Habit',
+                  value: task.habitId!,
+                ),
+              ],
+              if (task.createdAt != null) ...[
+                const SizedBox(height: 14),
+                _metaRow(
+                  cs,
+                  icon: Icons.access_time_outlined,
+                  label: 'Created',
+                  value: _formatDateTime(task.createdAt!),
+                ),
+              ],
+
+              // XP awarded indicator
+              if (task.xpEverAwarded) ...[
+                const SizedBox(height: 14),
+                _metaRow(
+                  cs,
+                  icon: Icons.bolt_rounded,
+                  label: 'XP Status',
+                  value: '+${task.xp} XP already credited',
+                ),
+              ],
+
+              const SizedBox(height: 28),
+
+              // Action button
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: isCompleted
+                        ? cs.surfaceContainerHigh
+                        : cs.primary,
+                    foregroundColor: isCompleted
+                        ? cs.onSurfaceVariant
+                        : cs.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppUiTokens.buttonRadius,
+                      ),
+                    ),
+                  ),
+                  onPressed: () => onToggle(context),
+                  icon: Icon(
+                    isCompleted
+                        ? Icons.undo_rounded
+                        : Icons.check_circle_outline_rounded,
+                    size: 20,
+                  ),
+                  label: Text(
+                    isCompleted ? 'Mark as Incomplete' : 'Mark as Complete',
+                    style: AppTextStyles.labelMd.copyWith(
+                      color: isCompleted ? cs.onSurfaceVariant : cs.onPrimary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -490,8 +474,18 @@ class _DailyTaskDetailSheet extends StatelessWidget {
 
   String _formatDateTime(DateTime dt) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     final hour = dt.hour.toString().padLeft(2, '0');
     final minute = dt.minute.toString().padLeft(2, '0');

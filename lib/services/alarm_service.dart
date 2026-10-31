@@ -67,6 +67,7 @@ class AlarmService {
         volumeSettings: VolumeSettings.fade(
           volume: 0.8,
           fadeDuration: const Duration(seconds: 3),
+          showSystemUI: false,
         ),
         notificationSettings: NotificationSettings(
           title: habit.name,
@@ -123,7 +124,6 @@ class AlarmService {
       );
       await androidPlugin?.requestNotificationsPermission();
     }
-
   }
 
   static Future<void> _ensureTimezoneInitialized() async {
@@ -196,6 +196,11 @@ class AlarmService {
       details,
       payload: '$alarmId|${habit.id}',
     );
+  }
+
+  /// Cancel a scheduled or visible notification for [alarmId].
+  static Future<void> cancelAlarmNotification(int alarmId) async {
+    await _localNotifications.cancel(alarmId);
   }
 
   /// Build the text used for the app notification for [habit].
@@ -279,6 +284,7 @@ class AlarmService {
       volumeSettings: VolumeSettings.fade(
         volume: 0.8,
         fadeDuration: const Duration(seconds: 3),
+        showSystemUI: false,
       ),
       notificationSettings: NotificationSettings(
         title: habit.name,
@@ -337,6 +343,10 @@ class AlarmService {
         return 'Time to count your reps! Tap to open.';
       case GoalType.duration:
         return 'Start your timer! Tap to open.';
+      case GoalType.tapLocations:
+        return 'Tap all 10 spots to stop the alarm.';
+      case GoalType.qrScan:
+        return 'Scan your profile QR code to stop the alarm.';
       case GoalType.simpleCheck:
         return 'Ready to check this off? Tap to open.';
     }

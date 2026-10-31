@@ -2,6 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:habitoo/models/habit_model.dart';
 
 void main() {
+  test('selects a habit period from its reminder time', () {
+    expect(habitPeriodForReminderTime('10:00'), HabitPeriod.morning);
+    expect(habitPeriodForReminderTime('12:00'), HabitPeriod.evening);
+    expect(habitPeriodForReminderTime('19:59'), HabitPeriod.evening);
+    expect(habitPeriodForReminderTime('20:00'), HabitPeriod.night);
+    expect(habitPeriodForReminderTime('04:59'), HabitPeriod.night);
+  });
+
   test('stores night period in firestore payload', () {
     final habit = HabitModel(
       id: '1',

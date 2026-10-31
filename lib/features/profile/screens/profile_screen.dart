@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../controllers/phone_auth_controller.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/theme/app_ui_tokens.dart';
+import '../../../core/utils/profile_qr_code.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/theme_provider.dart';
 import '../../../providers/user_provider.dart';
@@ -23,6 +26,7 @@ class ProfileScreen extends ConsumerWidget {
     final profile = ref.watch(profileProvider);
     final notifier = ref.read(profileProvider.notifier);
     final userAsync = ref.watch(userDocProvider);
+    final uid = FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
       appBar: AppHeader(
@@ -35,7 +39,7 @@ class ProfileScreen extends ConsumerWidget {
             AppUiTokens.screenPadding,
             12,
             AppUiTokens.screenPadding,
-            28,
+            120,
           ),
           children: [
             userAsync.when(
@@ -43,12 +47,67 @@ class ProfileScreen extends ConsumerWidget {
               error: (error, stackTrace) => ProfileHeader(profile: profile),
               data: (liveUser) => ProfileHeader(profile: profile),
             ),
+            if (uid != null) ...[
+              const SizedBox(height: 20),
+              _buildProfileQrCard(context, cs, uid),
+            ],
             const SizedBox(height: 24),
             _buildAchievementsSection(context, cs, profile),
             const SizedBox(height: 24),
             _buildSettingsSection(context, ref, cs, profile, notifier),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildProfileQrCard(
+    BuildContext context,
+    ColorScheme cs,
+    String uid,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppUiTokens.cardRadiusMedium),
+        boxShadow: [
+          BoxShadow(
+            color: cs.primary.withValues(alpha: 0.04),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Your unique Profile QR',
+            style: AppTextStyles.headlineMd.copyWith(color: cs.onSurface),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Show this code on another screen to dismiss a QR alarm.',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.bodyMd.copyWith(color: cs.onSurfaceVariant),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: QrImageView(
+              data: ProfileQrCode.dataForUid(uid),
+              version: QrVersions.auto,
+              size: 190,
+              backgroundColor: Colors.white,
+              errorCorrectionLevel: QrErrorCorrectLevel.M,
+            ),
+          ),
+        ],
       ),
     );
   }

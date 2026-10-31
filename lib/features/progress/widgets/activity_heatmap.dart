@@ -21,14 +21,15 @@ class ActivityHeatmap extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
 
     final visibleDays = heatmapDays.isEmpty
-        ? List.generate(30, (index) {
-            final intensity = index % HeatmapIntensity.values.length;
-            return HeatmapDay(
+        ? List.generate(
+            30,
+            (index) => HeatmapDay(
               dayIndex: index + 1,
-              intensity: HeatmapIntensity.values[intensity],
-              completedHabits: 1 + (index % 6),
-            );
-          })
+              dateLabel: '',
+              intensity: HeatmapIntensity.low,
+              completedHabits: 0,
+            ),
+          )
         : heatmapDays.length > 30
             ? heatmapDays.take(30).toList()
             : heatmapDays;
@@ -121,8 +122,10 @@ class ActivityHeatmap extends StatelessWidget {
             childAspectRatio: 1,
             children: visibleDays.map((day) {
               return Tooltip(
-                message: 'Day ${day.dayIndex}: ${day.completedHabits} habits',
-                child: Container(
+                  message: day.dateLabel.isEmpty
+                      ? '${day.completedHabits} habits completed'
+                      : '${day.dateLabel}: ${day.completedHabits} habits completed',
+                  child: Container(
                   decoration: BoxDecoration(
                     color: _heatmapColor(day.intensity, cs),
                     borderRadius: BorderRadius.circular(6),

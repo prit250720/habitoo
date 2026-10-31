@@ -11,8 +11,20 @@ class DashboardState {
 
   final List<HabitModel> habits;
 
-  int get completedCount => habits.where((h) => h.isCompleted).length;
-  int get totalCount => habits.length;
+  List<HabitModel> get todaysHabits {
+    final today = DateTime.now();
+    final todayIndex = today.weekday - 1;
+    return habits
+        .where(
+          (habit) =>
+              habit.frequency == 'Daily' ||
+              habit.selectedDays.contains(todayIndex),
+        )
+        .toList();
+  }
+
+  int get completedCount => todaysHabits.where((h) => h.isCompleted).length;
+  int get totalCount => todaysHabits.length;
 
   double get progressPercent {
     if (totalCount == 0) return 0;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/theme/app_ui_tokens.dart';
+import '../../../routing/app_router.dart';
 
 class DashboardProgressCard extends StatelessWidget {
   const DashboardProgressCard({
@@ -68,7 +70,9 @@ class DashboardProgressCard extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'You have completed $completedCount out of $totalHabits habits for today.',
+          totalHabits == 0
+              ? 'No habits are scheduled for today.'
+              : 'You have completed $completedCount out of $totalHabits habits for today.',
           style: AppTextStyles.bodyMd.copyWith(color: cs.onSurfaceVariant),
           maxLines: 3,
         ),
@@ -83,7 +87,7 @@ class DashboardProgressCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(999),
               ),
             ),
-            onPressed: () {},
+            onPressed: () => context.push(AppRoutes.progress),
             child: Text(
               'View Stats',
               style: AppTextStyles.labelMd.copyWith(color: cs.onPrimary),

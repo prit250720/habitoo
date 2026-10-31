@@ -79,7 +79,9 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [progressStatsProvider.overrideWithValue(stats)],
+        overrides: [
+          progressStatsProvider.overrideWithValue(AsyncData(stats)),
+        ],
         child: const MaterialApp(home: ProgressScreen()),
       ),
     );
@@ -87,7 +89,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Progress Dashboard'), findsOneWidget);
-    expect(find.text('Longest Streak'), findsOneWidget);
+    expect(find.text('Strongest Current Streak'), findsOneWidget);
     expect(find.byType(WeeklyActivityCard), findsOneWidget);
     expect(find.byType(StatCard), findsAtLeastNWidgets(2));
     expect(find.byType(AppHeader), findsOneWidget);
